@@ -31,7 +31,7 @@ def get_args():
     return parser.parse_args()
 
 def load_csv(args):
-    ### Import CSV and translate Likelihood and Impact to numbers ###
+    """ Import CSV and translate Likelihood and Impact to numbers """
 
     global amount_high
     global amount_medium
@@ -56,9 +56,9 @@ def load_csv(args):
                 y = 100
             if row[3] == "H":
                 amount_high += 1
-            if row[3] == "M":
+            elif row[3] == "M":
                 amount_medium += 1
-            if row[3] == "L":
+            elif row[3] == "L":
                 amount_low += 1
             x_coords.append(x)
             y_coords.append(y)
@@ -70,29 +70,36 @@ def ring(args):
     """ Ring functions """
     fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(aspect="equal"))
 
+    # Ring width size
     size = 0.25
 
     data = amount_high, amount_medium, amount_low
     labels = ["High", "Medium", "Low"]
     colors = ["red", "orange", "yellow"]
 
+    # Plot wedges
     ax.pie(data, wedgeprops=dict(width=size, edgecolor="black", linewidth=1), startangle=90,
            colors=colors, labels=data)
 
+    # Determine exposure_level
     largest_index = data.index(max(data))
     if largest_index == 0:
-        risk = "High"
+        exposure_level = "High"
     elif largest_index == 1:
-        risk = "Medium"
+        exposure_level = "Medium"
     elif largest_index == 2:
-        risk = "Low"
+        exposure_level = "Low"
 
+    # Print exposure level
     ax.text(0.5, 0.5, "Exposure level", transform=ax.transAxes, fontsize=10,
             horizontalalignment='center', verticalalignment='center')
-    ax.text(0.5, 0.43, risk, transform=ax.transAxes, fontsize=14,
+    ax.text(0.5, 0.43, exposure_level, transform=ax.transAxes, fontsize=14,
             horizontalalignment='center', verticalalignment='center')
+
+    # Print legend
     ax.legend(labels, loc="best", ncol=1, prop={'size': 5})
 
+    # Output
     if not args.output_png_file:
         plt.show()
     else:
@@ -154,6 +161,7 @@ def grid(args):
     # Print grid
     plt.grid(color='black', alpha=0.5, linestyle='--')
 
+    # Output
     if not args.output_png_file:
         plt.show()
     else:
