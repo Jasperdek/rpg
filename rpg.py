@@ -68,7 +68,7 @@ def load_csv(args):
 
 def ring(args):
     """ Ring functions """
-    fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(aspect="equal"))
+    fig, ax = plt.subplots(subplot_kw=dict(aspect="equal"))
 
     # Ring width size
     size = 0.25
@@ -97,7 +97,7 @@ def ring(args):
             horizontalalignment='center', verticalalignment='center')
 
     # Print legend
-    ax.legend(labels, loc="best", ncol=1, prop={'size': 5})
+    ax.legend(labels, loc="center left", bbox_to_anchor=(1, 0.5), ncol=1)
 
     # Output
     if not args.output_png_file:
