@@ -91,10 +91,10 @@ def ring(args):
         exposure_level = "Low"
 
     # Print exposure level
-    ax.text(0.5, 0.5, "Exposure level", transform=ax.transAxes, fontsize=10,
+    ax.text(0.5, 0.53, "Exposure level", transform=ax.transAxes, fontsize=16,
             horizontalalignment='center', verticalalignment='center')
-    ax.text(0.5, 0.43, exposure_level, transform=ax.transAxes, fontsize=14,
-            horizontalalignment='center', verticalalignment='center')
+    ax.text(0.5, 0.45, exposure_level, transform=ax.transAxes, fontsize=24,
+            horizontalalignment='center', verticalalignment='center', weight='bold')
 
     # Print legend
     ax.legend(labels, loc="center left", bbox_to_anchor=(1, 0.5), ncol=1)
