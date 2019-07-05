@@ -44,4 +44,6 @@ To generate a risk ring: `$ ./rpg.py -iC example/input/data.csv -oP example/outp
 
 ## To do
 
-1. Figure out a way, to replace markers with numbers.
+1. Figure out a way to replace markers with numbers.
+2. Figure out a way to plot markers without potentially overlapping.
+   The randomise function still causes collisions when adding when plotting multiple markers in the same box.

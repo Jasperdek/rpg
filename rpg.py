@@ -6,7 +6,9 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
+import os
 import random
+from pathlib import Path
 
 observation_names = []
 amount_of_observations = []
@@ -19,6 +21,7 @@ amount_low = 0
 
 def get_args():
     """ Get arguments """
+
     parser = argparse.ArgumentParser(description='Converting scanning reports to a tabular format')
     parser.add_argument('-g', '--grid', action='store_true',
                         help='generate a risk grid.')
@@ -68,6 +71,7 @@ def load_csv(args):
 
 def ring(args):
     """ Ring functions """
+
     fig, ax = plt.subplots(subplot_kw=dict(aspect="equal"))
 
     # Ring width size
@@ -109,7 +113,11 @@ def grid(args):
     """ Grid function """
 
     # Background
-    img = plt.imread("data/bg.png")
+    bg = Path("data/bg.png")
+    if os.path.isfile(bg):
+        img = plt.imread("data/bg.png")
+    else:
+        img = plt.imread("/usr/share/rpg/data/bg.png")
 
     # Axis spacing values
     x_axis_spacing = plticker.MultipleLocator(base=150)
@@ -125,8 +133,8 @@ def grid(args):
     # Plot observations with a random offset inside their quadrant
     for i, name, marker, risk in zip(amount_of_observations, observation_names, markers,
                                      risk_rating):
-        x_random = random.randint(x_coords[i]-80, x_coords[i]-20)
-        y_random = random.randint(y_coords[i]-80, y_coords[i]-20)
+        x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
+        y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
         x = x_random
         y = y_random
         if risk == 'H':
