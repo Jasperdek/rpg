@@ -33,13 +33,13 @@ To generate a risk grid plot: `$ ./rpg.py -iC example/input/observations.csv -oP
 
 ![Risk grid](example/output/grid.png "Risk grid")
 
-To generate a risk ring: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/ring.png -r`
+To generate a risk donut: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/donut.png -r`
 
-![Risk ring](example/output/donut.png "Risk ring")
+![Risk donut](example/output/donut.png "Risk donut")
 
 To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/ring.png -r`
 
-![Risk ring](example/output/recommendations.png "Risk ring")
+![Risk recommendations](example/output/recommendations.png "Risk recommendations")
 
 ## Dependencies
 
