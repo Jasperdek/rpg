@@ -170,12 +170,13 @@ def grid(args):
         x = x_random
         y = y_random
         if risk == 'H':
-            ax.scatter(x, y, marker='o', c='red', s=60, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='red', s=80, edgecolors='face')
         elif risk == 'M':
-            ax.scatter(x, y, marker='o', c='orange', s=60, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='orange', s=80, edgecolors='face')
         elif risk == 'L':
-            ax.scatter(x, y, marker='o', c='green', s=60, edgecolors='face')
-        ax.text(x+0, y-2, number, fontsize=5, horizontalalignment='center', color='white')
+            ax.scatter(x, y, marker='o', c='green', s=80, edgecolors='face')
+        ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+                weight='bold')
 
     # Print legend
     for item in zip(numbers, observation_names):
@@ -236,8 +237,9 @@ def recommendations(args):
         y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
         x = x_random
         y = y_random
-        ax.scatter(x, y, marker='o', c='royalblue', s=60, edgecolors='black')
-        ax.text(x+0, y-13, number, fontsize=5, horizontalalignment='center', color='black')
+        ax.scatter(x, y, marker='o', c='royalblue', s=80, edgecolors='black')
+        ax.text(x+0, y-15, number, fontsize=7, horizontalalignment='center', color='black',
+                weight='bold')
 
     # Print legend
     for item in zip(numbers, observation_names):
