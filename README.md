@@ -1,6 +1,6 @@
 # Risk plot generator (rpg)
 
-This tool takes a CSV file with your observations and outputs either a ring plot, or grid plot.
+This tool takes a CSV file with your observations and can output either a grid plot, or a donut ring. It also accepts a CSV with recommendations to output a recommendations grid.
 
 ## Rationale
 
@@ -50,6 +50,5 @@ To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendation
 
 ## To do
 
-1. Figure out a way to replace markers with numbers.
-2. Figure out a way to plot markers without potentially overlapping.
+1. Figure out a way to plot markers without potentially overlapping.
    The randomise function still causes collisions when adding when plotting multiple markers in the same box.
