@@ -11,14 +11,16 @@ And since I want to increase my Python skills some more, this would be a fun lit
 
 ```
 $ ./rpg.py -h
-usage: rpg.py [-h] [-g] [-r] [-i INPUT_FILE] [-o OUTPUT_FILE]
+usage: rpg.py [-h] [-g] [-d] [-r] -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
 
 Converting scanning reports to a tabular format
 
 optional arguments:
   -h, --help            show this help message and exit
-  -g, --grid            generate a risk grid.
-  -r, --ring            generate a risk ring.
+  -g, --grid            generate a risk grid plot.
+  -d, --donut           generate a risk donut.
+  -r, --recommendations
+                        generate a risk recommendations plot.
   -iC INPUT_CSV_FILE, --input-csv-file INPUT_CSV_FILE
                         specify an input CSV file (e.g. data.csv).
   -oP OUTPUT_PNG_FILE, --output-png-file OUTPUT_PNG_FILE
@@ -27,13 +29,17 @@ optional arguments:
 
 ## Example
 
-To generate a risk grid: `$ ./rpg.py -iC example/input/data.csv -oP example/output/grid.png -g`
+To generate a risk grid plot: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/grid.png -g`
 
 ![Risk grid](example/output/grid.png "Risk grid")
 
-To generate a risk ring: `$ ./rpg.py -iC example/input/data.csv -oP example/output/ring.png -r`
+To generate a risk ring: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/ring.png -r`
 
-![Risk ring](example/output/ring.png "Risk ring")
+![Risk ring](example/output/donut.png "Risk ring")
+
+To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/ring.png -r`
+
+![Risk ring](example/output/recommendations.png "Risk ring")
 
 ## Dependencies
 

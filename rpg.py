@@ -10,9 +10,11 @@ import os
 import random
 from pathlib import Path
 
+numbers = []
 observation_names = []
 amount_of_observations = []
 risk_rating = []
+mylabels = []
 x_coords = []
 y_coords = []
 amount_high = 0
@@ -24,16 +26,18 @@ def get_args():
 
     parser = argparse.ArgumentParser(description='Converting scanning reports to a tabular format')
     parser.add_argument('-g', '--grid', action='store_true',
-                        help='generate a risk grid.')
-    parser.add_argument('-r', '--ring', action='store_true',
-                        help='generate a risk ring.')
+                        help='generate a risk grid plot.')
+    parser.add_argument('-d', '--donut', action='store_true',
+                        help='generate a risk donut.')
+    parser.add_argument('-r', '--recommendations', action='store_true',
+                        help='generate a risk recommendations plot.')
     parser.add_argument('-iC', '--input-csv-file', required=True,
                         help='specify an input CSV file (e.g. data.csv).')
     parser.add_argument('-oP', '--output-png-file',
                         help='specify an output PNG file (e.g. risk.png).')
     return parser.parse_args()
 
-def load_csv(args):
+def load_risk_csv(args):
     """ Import CSV and translate Likelihood and Impact to numbers """
 
     global amount_high
@@ -43,25 +47,26 @@ def load_csv(args):
         data = csv.reader(csvfile, delimiter=',')
         next(data)
         for row in data:
-            observation_names.append(row[0])
-            risk_rating.append(row[3])
-            if row[1] == "H":
-                x = 450
-            elif row[1] == "M":
-                x = 300
-            elif row[1] == "L":
-                x = 150
+            numbers.append(row[0])
+            observation_names.append(row[1])
+            risk_rating.append(row[4])
             if row[2] == "H":
-                y = 300
+                x = 450
             elif row[2] == "M":
-                y = 200
+                x = 300
             elif row[2] == "L":
-                y = 100
+                x = 150
             if row[3] == "H":
-                amount_high += 1
+                y = 300
             elif row[3] == "M":
-                amount_medium += 1
+                y = 200
             elif row[3] == "L":
+                y = 100
+            if row[4] == "H":
+                amount_high += 1
+            elif row[4] == "M":
+                amount_medium += 1
+            elif row[4] == "L":
                 amount_low += 1
             x_coords.append(x)
             y_coords.append(y)
@@ -69,7 +74,34 @@ def load_csv(args):
     for row in enumerate(observation_names):
         amount_of_observations.append(row[0])
 
-def ring(args):
+def load_recommendations_csv(args):
+    """ Import CSV and translate Likelihood and Impact to numbers """
+
+    with open(args.input_csv_file, newline='') as csvfile:
+        data = csv.reader(csvfile, delimiter=',')
+        next(data)
+        for row in data:
+            numbers.append(row[0])
+            observation_names.append(row[1])
+            if row[2] == "H":
+                x = 450
+            elif row[2] == "M":
+                x = 300
+            elif row[2] == "L":
+                x = 150
+            if row[3] == "H":
+                y = 300
+            elif row[3] == "M":
+                y = 200
+            elif row[3] == "L":
+                y = 100
+            x_coords.append(x)
+            y_coords.append(y)
+
+    for row in enumerate(observation_names):
+        amount_of_observations.append(row[0])
+
+def donut(args):
     """ Ring functions """
 
     fig, ax = plt.subplots(subplot_kw=dict(aspect="equal"))
@@ -113,40 +145,43 @@ def grid(args):
     """ Grid function """
 
     # Background
-    bg = Path("data/bg.png")
+    bg = Path("data/grid-bg.png")
     if os.path.isfile(bg):
-        img = plt.imread("data/bg.png")
+        img = plt.imread("data/grid-bg.png")
     else:
-        img = plt.imread("/usr/share/rpg/data/bg.png")
+        img = plt.imread("/usr/share/rpg/data/grid-bg.png")
 
     # Axis spacing values
     x_axis_spacing = plticker.MultipleLocator(base=150)
     y_axis_spacing = plticker.MultipleLocator(base=100)
 
     # Some plot markers
-    markers = ['o', 's', 'D', 'd', '^', '>', 'v', '<', '*', 'P', 'x', 'X', '|', '_', '1', '2', '3',
-               '4']
+    # markers = ['o', 's', 'D', 'd', '^', '>', 'v', '<', '*', 'P', 'x', 'X', '|', '_', '1', '2',
+    #            '3', '4']
 
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, 450, 0, 300])
 
     # Plot observations with a random offset inside their quadrant
-    for i, name, marker, risk in zip(amount_of_observations, observation_names, markers,
+    for number, i, name, risk in zip(numbers, amount_of_observations, observation_names,
                                      risk_rating):
         x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
         y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
         x = x_random
         y = y_random
         if risk == 'H':
-            ax.scatter(x, y, marker=marker, c='red')
+            ax.scatter(x, y, marker='o', c='red', s=60, edgecolors='face')
         elif risk == 'M':
-            ax.scatter(x, y, marker=marker, c='orange')
+            ax.scatter(x, y, marker='o', c='orange', s=60, edgecolors='face')
         elif risk == 'L':
-            ax.scatter(x, y, marker=marker, c='green')
-        # ax.text(x+0, y-15, name, fontsize=5, horizontalalignment='center')
+            ax.scatter(x, y, marker='o', c='green', s=60, edgecolors='face')
+        ax.text(x+0, y-2, number, fontsize=5, horizontalalignment='center', color='white')
 
     # Print legend
-    ax.legend(observation_names, loc="upper left", ncol=1, bbox_to_anchor=(1, 1.02))
+    for item in zip(numbers, observation_names):
+        mylabels.append(' '.join(item))
+    ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
+              bbox_to_anchor=(1, 1.02))
 
     # Hide axis numbers
     ax.set_yticklabels([])
@@ -157,14 +192,76 @@ def grid(args):
     ax.yaxis.set_major_locator(y_axis_spacing)
 
     # Print arrows along axis
-    ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
-                arrowprops=dict(arrowstyle="<-", color='black'))
-    ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
-                arrowprops=dict(arrowstyle="<-", color='black'))
+    # ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
+                # arrowprops=dict(arrowstyle="<-", color='black'))
+    # ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
+                # arrowprops=dict(arrowstyle="<-", color='black'))
 
     # Print axis titles
-    plt.xlabel("Likelihood", labelpad=20)
-    plt.ylabel("Impact", labelpad=20)
+    # plt.xlabel("Likelihood", labelpad=20)
+    # plt.ylabel("Impact", labelpad=20)
+
+    # Print grid
+    plt.grid(color='black', alpha=0.5, linestyle='--')
+
+    # Output
+    if not args.output_png_file:
+        plt.show()
+    else:
+        plt.savefig(args.output_png_file, transparent=True, dpi=200, bbox_inches='tight')
+
+def recommendations(args):
+    """ Grid function """
+
+    # Background
+    bg = Path("data/recommendations-bg.png")
+    if os.path.isfile(bg):
+        img = plt.imread("data/recommendations-bg.png")
+    else:
+        img = plt.imread("/usr/share/rpg/data/recommendations-bg.png")
+
+    # Axis spacing values
+    x_axis_spacing = plticker.MultipleLocator(base=150)
+    y_axis_spacing = plticker.MultipleLocator(base=100)
+
+    # Some plot markers
+    # markers = ['o', 's', 'D', 'd', '^', '>', 'v', '<', '*', 'P', 'x', 'X', '|', '_', '1', '2',
+    #            '3', '4']
+    fig, ax = plt.subplots()
+    ax.imshow(img, extent=[0, 450, 0, 300])
+
+    # Plot observations with a random offset inside their quadrant
+    for number, i, name in zip(numbers, amount_of_observations, observation_names):
+        x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
+        y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
+        x = x_random
+        y = y_random
+        ax.scatter(x, y, marker='o', c='royalblue', s=60, edgecolors='black')
+        ax.text(x+0, y-13, number, fontsize=5, horizontalalignment='center', color='black')
+
+    # Print legend
+    for item in zip(numbers, observation_names):
+        mylabels.append(' '.join(item))
+    ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
+              bbox_to_anchor=(1, 1.02))
+
+    # Hide axis numbers
+    ax.set_yticklabels([])
+    ax.set_xticklabels([])
+
+    # Grid spacing
+    ax.xaxis.set_major_locator(x_axis_spacing)
+    ax.yaxis.set_major_locator(y_axis_spacing)
+
+    # Print arrows along axis
+    # ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
+                # arrowprops=dict(arrowstyle="<-", color='black'))
+    # ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
+                # arrowprops=dict(arrowstyle="<-", color='black'))
+
+    # Print axis titles
+    # plt.xlabel("Likelihood", labelpad=20)
+    # plt.ylabel("Impact", labelpad=20)
 
     # Print grid
     plt.grid(color='black', alpha=0.5, linestyle='--')
@@ -176,8 +273,15 @@ def grid(args):
         plt.savefig(args.output_png_file, transparent=True, dpi=200, bbox_inches='tight')
 
 args = get_args()
-load_csv(args)
-if args.ring:
-    ring(args)
+
+if args.donut or args.grid:
+    load_risk_csv(args)
+elif args.recommendations:
+    load_recommendations_csv(args)
+
+if args.donut:
+    donut(args)
 if args.grid:
     grid(args)
+if args.recommendations:
+    recommendations(args)
