@@ -243,7 +243,7 @@ def recommendations(args):
 
     # Plot observations with a random offset inside their quadrant
     for number, i, name in zip(numbers, amount_of_observations, observation_names):
-        x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
+        x_random = random.randint(x_coords[i]-140, x_coords[i]-10)
         y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
         x = x_random
         y = y_random
