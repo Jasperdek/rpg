@@ -35,6 +35,12 @@ def get_args():
                         help='specify an input CSV file (e.g. data.csv).')
     parser.add_argument('-oP', '--output-png-file',
                         help='specify an output PNG file (e.g. risk.png).')
+    parser.add_argument('--axis-labels',
+                        help='specify to print the axis labels')
+    parser.add_argument('--axis-arrows',
+                        help='specify to print arrows along the axis')
+    parser.add_argument('--legend',
+                        help='specify to print the legend')
     return parser.parse_args()
 
 def load_risk_csv(args):
@@ -133,7 +139,8 @@ def donut(args):
             horizontalalignment='center', verticalalignment='center', weight='bold')
 
     # Print legend
-    ax.legend(labels, loc="center left", bbox_to_anchor=(1, 0.5), ncol=1)
+    if args.legend:
+        ax.legend(labels, loc="center left", bbox_to_anchor=(1, 0.5), ncol=1)
 
     # Output
     if not args.output_png_file:
@@ -170,19 +177,20 @@ def grid(args):
         x = x_random
         y = y_random
         if risk == 'H':
-            ax.scatter(x, y, marker='o', c='red', s=80, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='red', s=100, edgecolors='face')
         elif risk == 'M':
-            ax.scatter(x, y, marker='o', c='orange', s=80, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='orange', s=100, edgecolors='face')
         elif risk == 'L':
-            ax.scatter(x, y, marker='o', c='green', s=80, edgecolors='face')
-        ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+            ax.scatter(x, y, marker='o', c='yellow', s=100, edgecolors='face')
+        ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
                 weight='bold')
 
     # Print legend
-    for item in zip(numbers, observation_names):
-        mylabels.append(' '.join(item))
-    ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
-              bbox_to_anchor=(1, 1.02))
+    if args.legend:
+        for item in zip(numbers, observation_names):
+            mylabels.append(' '.join(item))
+        ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
+                  bbox_to_anchor=(1, 1.02))
 
     # Hide axis numbers
     ax.set_yticklabels([])
@@ -193,14 +201,16 @@ def grid(args):
     ax.yaxis.set_major_locator(y_axis_spacing)
 
     # Print arrows along axis
-    # ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
-                # arrowprops=dict(arrowstyle="<-", color='black'))
-    # ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
-                # arrowprops=dict(arrowstyle="<-", color='black'))
+    if args.axis_arrows:
+        ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
+                    arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
+                    arrowprops=dict(arrowstyle="<-", color='black'))
 
-    # Print axis titles
-    # plt.xlabel("Likelihood", labelpad=20)
-    # plt.ylabel("Impact", labelpad=20)
+    # Print axis labels
+    if args.axis_labels:
+        plt.xlabel("Likelihood", labelpad=20)
+        plt.ylabel("Impact", labelpad=20)
 
     # Print grid
     plt.grid(color='black', alpha=0.5, linestyle='--')
@@ -242,10 +252,11 @@ def recommendations(args):
                 weight='bold')
 
     # Print legend
-    for item in zip(numbers, observation_names):
-        mylabels.append(' '.join(item))
-    ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
-              bbox_to_anchor=(1, 1.02))
+    if args.legend:
+        for item in zip(numbers, observation_names):
+            mylabels.append(' '.join(item))
+        ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
+                  bbox_to_anchor=(1, 1.02))
 
     # Hide axis numbers
     ax.set_yticklabels([])
@@ -256,14 +267,16 @@ def recommendations(args):
     ax.yaxis.set_major_locator(y_axis_spacing)
 
     # Print arrows along axis
-    # ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
-                # arrowprops=dict(arrowstyle="<-", color='black'))
-    # ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
-                # arrowprops=dict(arrowstyle="<-", color='black'))
+    if args.axis_arrows:
+        ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
+                    arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
+                    arrowprops=dict(arrowstyle="<-", color='black'))
 
-    # Print axis titles
-    # plt.xlabel("Likelihood", labelpad=20)
-    # plt.ylabel("Impact", labelpad=20)
+    # Print axis labels
+    if args.axis_labels:
+        plt.xlabel("Likelihood", labelpad=20)
+        plt.ylabel("Impact", labelpad=20)
 
     # Print grid
     plt.grid(color='black', alpha=0.5, linestyle='--')
