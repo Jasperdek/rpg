@@ -172,18 +172,24 @@ def grid(args):
     # Plot observations with a random offset inside their quadrant
     for number, i, name, risk in zip(numbers, amount_of_observations, observation_names,
                                      risk_rating):
-        x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
-        y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
+        #x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
+        #y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
+        x_random = random.randrange(x_coords[i]-90, x_coords[i]-10, 25)
+        y_random = random.randrange(y_coords[i]-80, y_coords[i]-10, 20)
         x = x_random
         y = y_random
         if risk == 'H':
-            ax.scatter(x, y, marker='o', c='red', s=100, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='#e20000', s=200, edgecolors='black')
+            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+                    weight='bold')
         elif risk == 'M':
-            ax.scatter(x, y, marker='o', c='orange', s=100, edgecolors='face')
+            ax.scatter(x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
+            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+                    weight='bold')
         elif risk == 'L':
-            ax.scatter(x, y, marker='o', c='yellow', s=100, edgecolors='face')
-        ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
-                weight='bold')
+            ax.scatter(x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
+            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
+                    weight='bold')
 
     # Print legend
     if args.legend:
@@ -247,9 +253,8 @@ def recommendations(args):
         y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
         x = x_random
         y = y_random
-        ax.scatter(x, y, marker='o', c='royalblue', s=80, edgecolors='black')
-        ax.text(x+0, y-15, number, fontsize=7, horizontalalignment='center', color='black',
-                weight='bold')
+        ax.scatter(x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
+        ax.text(x+0, y-3, number, fontsize=6, horizontalalignment='center', color='white', weight='bold')
 
     # Print legend
     if args.legend:
