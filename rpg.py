@@ -169,27 +169,40 @@ def grid(args):
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, 450, 0, 300])
 
-    # Plot observations with a random offset inside their quadrant
-    for number, i, name, risk in zip(numbers, amount_of_observations, observation_names,
-                                     risk_rating):
-        #x_random = random.randint(x_coords[i]-90, x_coords[i]-10)
-        #y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
-        x_random = random.randrange(x_coords[i]-90, x_coords[i]-10, 25)
-        y_random = random.randrange(y_coords[i]-80, y_coords[i]-10, 20)
-        x = x_random
-        y = y_random
-        if risk == 'H':
-            ax.scatter(x, y, marker='o', c='#e20000', s=200, edgecolors='black')
-            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
-                    weight='bold')
-        elif risk == 'M':
-            ax.scatter(x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
-            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
-                    weight='bold')
-        elif risk == 'L':
-            ax.scatter(x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
-            ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
-                    weight='bold')
+    # Plot observations with a sequential offset inside their quadrant
+    if x_coords and y_coords:
+
+        # Build list of sequential x and y offsets
+        x_seq = list(reversed(range(15, 150, 20)))
+        y_seq = list(range(15, 80, 20))
+
+        full_row = 0
+        for number, i, name, risk in zip(numbers, amount_of_observations, observation_names,
+                                         risk_rating):
+            full_row += 1
+            x_seq.append(x_seq[0])
+            y_seq.append(y_seq[0])
+            x = x_coords.pop(0)-x_seq.pop(0)
+
+            # Modulo 7 to jump to new row if current row is full
+            if full_row % 7 == 0:
+                y = y_coords.pop(0)-y_seq.pop(0)
+            else:
+                y = y_coords.pop(0)-y_seq[0]
+
+            # Actual plotting of observations
+            if risk == 'H':
+                ax.scatter(x, y, marker='o', c='#e20000', s=200, edgecolors='black')
+                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+                        weight='bold')
+            elif risk == 'M':
+                ax.scatter(x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
+                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
+                        weight='bold')
+            elif risk == 'L':
+                ax.scatter(x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
+                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
+                        weight='bold')
 
     # Print legend
     if args.legend:
@@ -247,16 +260,30 @@ def recommendations(args):
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, 450, 0, 300])
 
-    # Plot observations with a random offset inside their quadrant
-    for number, i, name in zip(numbers, amount_of_observations, observation_names):
-		#x_random = random.randint(x_coords[i]-140, x_coords[i]-10)
-        #y_random = random.randint(y_coords[i]-90, y_coords[i]-10)
-        x_random = random.randrange(x_coords[i]-130, x_coords[i]-10, 25)
-        y_random = random.randrange(y_coords[i]-80, y_coords[i]-10, 20)
-        x = x_random
-        y = y_random
-        ax.scatter(x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
-        ax.text(x+0, y-3, number, fontsize=6, horizontalalignment='center', color='white', weight='bold')
+    # Plot recommendations with a sequential offset inside their quadrant
+    if x_coords and y_coords:
+
+        # Build list of sequential x and y offsets
+        x_seq = list(reversed(range(25, 140, 25)))
+        y_seq = list(range(20, 80, 25))
+
+        full_row = 0
+        for number, i, name in zip(numbers, amount_of_observations, observation_names):
+            full_row += 1
+            x_seq.append(x_seq[0])
+            y_seq.append(y_seq[0])
+            x = x_coords.pop(0)-x_seq.pop(0)
+
+            # Modulo 5 to jump to new row if current row is full
+            if full_row % 5 == 0:
+                y = y_coords.pop(0)-y_seq.pop(0)
+            else:
+                y = y_coords.pop(0)-y_seq[0]
+
+            # Actual plotting of recommendations
+            ax.scatter(x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
+            ax.text(x+0, y-3, number, fontsize=6, horizontalalignment='center', color='white',
+                    weight='bold')
 
     # Print legend
     if args.legend:
