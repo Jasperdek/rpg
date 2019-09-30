@@ -12,6 +12,8 @@ And since I want to increase my Python skills some more, this would be a fun lit
 ```
 $ ./rpg.py -h
 usage: rpg.py [-h] [-g] [-d] [-r] -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
+              [--axis-labels AXIS_LABELS] [--axis-arrows AXIS_ARROWS]
+              [--legend LEGEND]
 
 Converting scanning reports to a tabular format
 
@@ -25,6 +27,11 @@ optional arguments:
                         specify an input CSV file (e.g. data.csv).
   -oP OUTPUT_PNG_FILE, --output-png-file OUTPUT_PNG_FILE
                         specify an output PNG file (e.g. risk.png).
+  --axis-labels AXIS_LABELS
+                        specify to print the axis labels
+  --axis-arrows AXIS_ARROWS
+                        specify to print arrows along the axis
+  --legend LEGEND       specify to print the legend
 ```
 
 ## Example
@@ -33,11 +40,11 @@ To generate a risk grid plot: `$ ./rpg.py -iC example/input/observations.csv -oP
 
 ![Risk grid](example/output/grid.png "Risk grid")
 
-To generate a risk donut: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/donut.png -r`
+To generate a risk donut: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/donut.png -d`
 
 ![Risk donut](example/output/donut.png "Risk donut")
 
-To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/ring.png -r`
+To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
 
 ![Risk recommendations](example/output/recommendations.png "Risk recommendations")
 
@@ -50,5 +57,4 @@ To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendation
 
 ## To do
 
-1. Figure out a way to plot markers without potentially overlapping.
-   The randomise function still causes collisions when adding when plotting multiple markers in the same box.
+1. Figure out a better way to avoid overlapping markers.
