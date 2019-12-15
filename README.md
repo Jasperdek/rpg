@@ -24,6 +24,12 @@ Using Pip:
 
 ## Usage
 
+You can use sr2t in two ways:
+
+* When installed as package, call the installed script: `rpg --help`.
+* When Git cloned, call the script directly from the root of the Git
+repository: `python -m rpg.rpg --help`
+
 ```
 $ rpg -h
 usage: rpg.py [-h] [-g] [-d] [-r] -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
