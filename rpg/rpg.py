@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
+
 """ Risk plot generator (rpg) """
 
 import argparse
 import csv
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
-import os
-import random
-from pathlib import Path
+import pkg_resources
 
 numbers = []
 observation_names = []
@@ -21,34 +19,38 @@ amount_high = 0
 amount_medium = 0
 amount_low = 0
 
+
 def get_args():
     """ Get arguments """
 
-    parser = argparse.ArgumentParser(description='Converting scanning reports to a tabular format')
-    parser.add_argument('-g', '--grid', action='store_true',
-                        help='generate a risk grid plot.')
-    parser.add_argument('-d', '--donut', action='store_true',
-                        help='generate a risk donut.')
-    parser.add_argument('-r', '--recommendations', action='store_true',
-                        help='generate a risk recommendations plot.')
-    parser.add_argument('-iC', '--input-csv-file', required=True,
-                        help='specify an input CSV file (e.g. data.csv).')
-    parser.add_argument('-oP', '--output-png-file',
-                        help='specify an output PNG file (e.g. risk.png).')
-    parser.add_argument('--axis-labels',
-                        help='specify to print the axis labels')
-    parser.add_argument('--axis-arrows',
-                        help='specify to print arrows along the axis')
-    parser.add_argument('--legend',
-                        help='specify to print the legend')
+    parser = argparse.ArgumentParser(
+        description='Converting scanning reports to a tabular format')
+    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group.add_argument(
+        '-g', '--grid', action='store_true', help='generate a risk grid plot.')
+    input_group.add_argument(
+        '-d', '--donut', action='store_true', help='generate a risk donut.')
+    input_group.add_argument(
+        '-r', '--recommendations', action='store_true',
+        help='generate a risk recommendations plot.')
+    parser.add_argument(
+        '-iC', '--input-csv-file', required=True,
+        help='specify an input CSV file (e.g. data.csv).')
+    parser.add_argument(
+        '-oP', '--output-png-file',
+        help='specify an output PNG file (e.g. risk.png).')
+    parser.add_argument(
+        '--axis-labels', help='specify to print the axis labels')
+    parser.add_argument(
+        '--axis-arrows', help='specify to print arrows along the axis')
+    parser.add_argument(
+        '--legend', help='specify to print the legend')
     return parser.parse_args()
 
-def load_risk_csv(args):
+
+def load_risk_csv(args, amount_high, amount_medium, amount_low):
     """ Import CSV and translate Likelihood and Impact to numbers """
 
-    global amount_high
-    global amount_medium
-    global amount_low
     with open(args.input_csv_file, newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         next(data)
@@ -80,6 +82,7 @@ def load_risk_csv(args):
     for row in enumerate(observation_names):
         amount_of_observations.append(row[0])
 
+
 def load_recommendations_csv(args):
     """ Import CSV and translate Likelihood and Impact to numbers """
 
@@ -107,6 +110,7 @@ def load_recommendations_csv(args):
     for row in enumerate(observation_names):
         amount_of_observations.append(row[0])
 
+
 def donut(args):
     """ Ring functions """
 
@@ -120,8 +124,9 @@ def donut(args):
     colors = ["red", "orange", "yellow"]
 
     # Plot wedges
-    ax.pie(data, wedgeprops=dict(width=size, edgecolor="black", linewidth=1), startangle=90,
-           colors=colors, labels=data)
+    ax.pie(
+        data, wedgeprops=dict(width=size, edgecolor="black", linewidth=1),
+        startangle=90, colors=colors, labels=data)
 
     # Determine exposure_level
     largest_index = data.index(max(data))
@@ -133,10 +138,13 @@ def donut(args):
         exposure_level = "Low"
 
     # Print exposure level
-    ax.text(0.5, 0.53, "Exposure level", transform=ax.transAxes, fontsize=16,
-            horizontalalignment='center', verticalalignment='center')
-    ax.text(0.5, 0.45, exposure_level, transform=ax.transAxes, fontsize=24,
-            horizontalalignment='center', verticalalignment='center', weight='bold')
+    ax.text(
+        0.5, 0.53, "Exposure level", transform=ax.transAxes, fontsize=16,
+        horizontalalignment='center', verticalalignment='center')
+    ax.text(
+        0.5, 0.45, exposure_level, transform=ax.transAxes, fontsize=24,
+        horizontalalignment='center', verticalalignment='center',
+        weight='bold')
 
     # Print legend
     if args.legend:
@@ -146,25 +154,21 @@ def donut(args):
     if not args.output_png_file:
         plt.show()
     else:
-        plt.savefig(args.output_png_file, transparent=True, dpi=200, bbox_inches='tight')
+        plt.savefig(
+            args.output_png_file, transparent=True, dpi=200,
+            bbox_inches='tight')
+
 
 def grid(args):
     """ Grid function """
 
     # Background
-    bg = Path("data/grid-bg.png")
-    if os.path.isfile(bg):
-        img = plt.imread("data/grid-bg.png")
-    else:
-        img = plt.imread("/usr/share/rpg/data/grid-bg.png")
+    grid_bg = pkg_resources.resource_stream(__name__, 'data/grid-bg.png')
+    img = plt.imread(grid_bg)
 
     # Axis spacing values
     x_axis_spacing = plticker.MultipleLocator(base=150)
     y_axis_spacing = plticker.MultipleLocator(base=100)
-
-    # Some plot markers
-    # markers = ['o', 's', 'D', 'd', '^', '>', 'v', '<', '*', 'P', 'x', 'X', '|', '_', '1', '2',
-    #            '3', '4']
 
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, 450, 0, 300])
@@ -177,8 +181,9 @@ def grid(args):
         y_seq = list(range(15, 80, 20))
 
         full_row = 0
-        for number, i, name, risk in zip(numbers, amount_of_observations, observation_names,
-                                         risk_rating):
+        for number, i, name, risk in zip(
+                numbers, amount_of_observations, observation_names,
+                risk_rating):
             full_row += 1
             x_seq.append(x_seq[0])
             y_seq.append(y_seq[0])
@@ -192,24 +197,31 @@ def grid(args):
 
             # Actual plotting of observations
             if risk == 'H':
-                ax.scatter(x, y, marker='o', c='#e20000', s=200, edgecolors='black')
-                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
-                        weight='bold')
+                ax.scatter(
+                    x, y, marker='o', c='#e20000', s=200, edgecolors='black')
+                ax.text(
+                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
+                    color='white', weight='bold')
             elif risk == 'M':
-                ax.scatter(x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
-                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='white',
-                        weight='bold')
+                ax.scatter(
+                    x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
+                ax.text(
+                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
+                    color='white', weight='bold')
             elif risk == 'L':
-                ax.scatter(x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
-                ax.text(x+0, y-3, number, fontsize=7, horizontalalignment='center', color='black',
-                        weight='bold')
+                ax.scatter(
+                    x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
+                ax.text(
+                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
+                    color='black', weight='bold')
 
     # Print legend
     if args.legend:
         for item in zip(numbers, observation_names):
             mylabels.append(' '.join(item))
-        ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
-                  bbox_to_anchor=(1, 1.02))
+        ax.legend(
+            observation_names, labels=mylabels, loc="upper left", ncol=1,
+            bbox_to_anchor=(1, 1.02))
 
     # Hide axis numbers
     ax.set_yticklabels([])
@@ -221,10 +233,12 @@ def grid(args):
 
     # Print arrows along axis
     if args.axis_arrows:
-        ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
-                    arrowprops=dict(arrowstyle="<-", color='black'))
-        ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
-                    arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate(
+            'High', va="center", xy=(0, -0.07), xycoords='axes fraction',
+            xytext=(1, -0.07), arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate(
+            'High', ha="center", xy=(-0.05, 0), xycoords='axes fraction',
+            xytext=(-0.05, 1), arrowprops=dict(arrowstyle="<-", color='black'))
 
     # Print axis labels
     if args.axis_labels:
@@ -238,25 +252,23 @@ def grid(args):
     if not args.output_png_file:
         plt.show()
     else:
-        plt.savefig(args.output_png_file, transparent=True, dpi=200, bbox_inches='tight')
+        plt.savefig(
+            args.output_png_file, transparent=True, dpi=200,
+            bbox_inches='tight')
+
 
 def recommendations(args):
     """ Grid function """
 
     # Background
-    bg = Path("data/recommendations-bg.png")
-    if os.path.isfile(bg):
-        img = plt.imread("data/recommendations-bg.png")
-    else:
-        img = plt.imread("/usr/share/rpg/data/recommendations-bg.png")
+    recommendations_bg = pkg_resources.resource_stream(
+        __name__, 'data/recommendations-bg.png')
+    img = plt.imread(recommendations_bg)
 
     # Axis spacing values
     x_axis_spacing = plticker.MultipleLocator(base=150)
     y_axis_spacing = plticker.MultipleLocator(base=100)
 
-    # Some plot markers
-    # markers = ['o', 's', 'D', 'd', '^', '>', 'v', '<', '*', 'P', 'x', 'X', '|', '_', '1', '2',
-    #            '3', '4']
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, 450, 0, 300])
 
@@ -268,7 +280,8 @@ def recommendations(args):
         y_seq = list(range(20, 80, 25))
 
         full_row = 0
-        for number, i, name in zip(numbers, amount_of_observations, observation_names):
+        for number, i, name in zip(
+                numbers, amount_of_observations, observation_names):
             full_row += 1
             x_seq.append(x_seq[0])
             y_seq.append(y_seq[0])
@@ -281,16 +294,19 @@ def recommendations(args):
                 y = y_coords.pop(0)-y_seq[0]
 
             # Actual plotting of recommendations
-            ax.scatter(x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
-            ax.text(x+0, y-3, number, fontsize=6, horizontalalignment='center', color='white',
-                    weight='bold')
+            ax.scatter(
+                x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
+            ax.text(
+                x+0, y-3, number, fontsize=6, horizontalalignment='center',
+                color='white', weight='bold')
 
     # Print legend
     if args.legend:
         for item in zip(numbers, observation_names):
             mylabels.append(' '.join(item))
-        ax.legend(observation_names, labels=mylabels, loc="upper left", ncol=1,
-                  bbox_to_anchor=(1, 1.02))
+        ax.legend(
+            observation_names, labels=mylabels, loc="upper left", ncol=1,
+            bbox_to_anchor=(1, 1.02))
 
     # Hide axis numbers
     ax.set_yticklabels([])
@@ -302,10 +318,12 @@ def recommendations(args):
 
     # Print arrows along axis
     if args.axis_arrows:
-        ax.annotate('High', va="center", xy=(0, -0.07), xycoords='axes fraction', xytext=(1, -0.07),
-                    arrowprops=dict(arrowstyle="<-", color='black'))
-        ax.annotate('High', ha="center", xy=(-0.05, 0), xycoords='axes fraction', xytext=(-0.05, 1),
-                    arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate(
+            'High', va="center", xy=(0, -0.07), xycoords='axes fraction',
+            xytext=(1, -0.07), arrowprops=dict(arrowstyle="<-", color='black'))
+        ax.annotate(
+            'High', ha="center", xy=(-0.05, 0), xycoords='axes fraction',
+            xytext=(-0.05, 1), arrowprops=dict(arrowstyle="<-", color='black'))
 
     # Print axis labels
     if args.axis_labels:
@@ -319,18 +337,28 @@ def recommendations(args):
     if not args.output_png_file:
         plt.show()
     else:
-        plt.savefig(args.output_png_file, transparent=True, dpi=200, bbox_inches='tight')
+        plt.savefig(
+            args.output_png_file, transparent=True, dpi=200,
+            bbox_inches='tight')
 
-args = get_args()
 
-if args.donut or args.grid:
-    load_risk_csv(args)
-elif args.recommendations:
-    load_recommendations_csv(args)
+def main():
+    """ Main function """
 
-if args.donut:
-    donut(args)
-if args.grid:
-    grid(args)
-if args.recommendations:
-    recommendations(args)
+    args = get_args()
+
+    if args.donut or args.grid:
+        load_risk_csv(args, amount_high, amount_medium, amount_low)
+    elif args.recommendations:
+        load_recommendations_csv(args)
+
+    if args.donut:
+        donut(args)
+    if args.grid:
+        grid(args)
+    if args.recommendations:
+        recommendations(args)
+
+
+if __name__ == '__main__':
+    main()

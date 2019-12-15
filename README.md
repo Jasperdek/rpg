@@ -1,11 +1,26 @@
+[![pipeline status](https://gitlab.com/0bs1d1an/rpg/badges/master/pipeline.svg)](https://gitlab.com/0bs1d1an/rpg/commits/master)
+
 # Risk plot generator (rpg)
 
-This tool takes a CSV file with your observations and can output either a grid plot, or a donut ring. It also accepts a CSV with recommendations to output a recommendations grid.
+This tool takes a CSV file with your observations and can output either a grid plot, or a donut ring.
+It also accepts a CSV with recommendations to output a recommendations grid.
 
 ## Rationale
 
 I was fed-up with having to manually create these graphs for a client and I wanted to make my life easier.
 And since I want to increase my Python skills some more, this would be a fun little project to catch two birds with one stone.
+
+## Dependencies
+
+1. argparse (dev-python/argparse);
+2. matplotlib (dev-python/matplotlib);
+3. python (dev-lang/python).
+
+## Install
+
+Using Pip:
+
+`pip install --user rpg-0bs1d1an`
 
 ## Usage
 
@@ -38,23 +53,16 @@ optional arguments:
 
 To generate a risk grid plot: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/grid.png -g`
 
-![Risk grid](example/output/grid.png "Risk grid")
+![Grid](example/output/grid.png)
 
 To generate a risk donut: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/donut.png -d`
 
-![Risk donut](example/output/donut.png "Risk donut")
+![Donut](example/output/donut.png)
 
 To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
 
-![Risk recommendations](example/output/recommendations.png "Risk recommendations")
-
-## Dependencies
-
-1. argparse (dev-python/argparse);
-2. matplotlib (dev-python/matplotlib);
-3. numpy (dev-python/numpy);
-4. python (dev-lang/python).
+![Recommendations](example/output/recommendations.png)
 
 ## To do
 
-1. Figure out a better way to avoid overlapping markers.
+1. Figure out a better way to place markers on each grid section
