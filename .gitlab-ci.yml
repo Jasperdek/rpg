@@ -11,4 +11,4 @@ flake8:
   stage: test
   script:
     - flake8 setup.py
-    - flake8 rpg/*.py
+    - flake8 rpg/rpg.py

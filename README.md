@@ -25,7 +25,7 @@ Using Pip:
 ## Usage
 
 ```
-$ ./rpg.py -h
+$ rpg -h
 usage: rpg.py [-h] [-g] [-d] [-r] -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
               [--axis-labels AXIS_LABELS] [--axis-arrows AXIS_ARROWS]
               [--legend LEGEND]
@@ -51,15 +51,15 @@ optional arguments:
 
 ## Example
 
-To generate a risk grid plot: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/grid.png -g`
+To generate a risk grid plot: `$ rpg -iC example/input/observations.csv -oP example/output/grid.png -g`
 
 ![Grid](example/output/grid.png)
 
-To generate a risk donut: `$ ./rpg.py -iC example/input/observations.csv -oP example/output/donut.png -d`
+To generate a risk donut: `$ rpg -iC example/input/observations.csv -oP example/output/donut.png -d`
 
 ![Donut](example/output/donut.png)
 
-To generate a recommendations plot: `$ ./rpg.py -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
+To generate a recommendations plot: `$ rpg -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
 
 ![Recommendations](example/output/recommendations.png)
 
