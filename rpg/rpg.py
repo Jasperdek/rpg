@@ -7,6 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 import pkg_resources
+# from pprint import pprint
 
 numbers = []
 observation_names = []
@@ -177,23 +178,37 @@ def grid(args):
     if x_coords and y_coords:
 
         # Build list of sequential x and y offsets
-        x_seq = list(reversed(range(15, 150, 20)))
-        y_seq = list(range(15, 80, 20))
+        x_seq = list(range(0, 130, 20))
+        y_seq = list(range(0, 80, 20))
 
-        full_row = 0
-        for number, i, name, risk in zip(
-                numbers, amount_of_observations, observation_names,
-                risk_rating):
-            full_row += 1
-            x_seq.append(x_seq[0])
-            y_seq.append(y_seq[0])
-            x = x_coords.pop(0)-x_seq.pop(0)
-
-            # Modulo 7 to jump to new row if current row is full
-            if full_row % 7 == 0:
-                y = y_coords.pop(0)-y_seq.pop(0)
+        x_plus_y = list(zip(x_coords, y_coords))
+        new_x_plus_y = []
+        for coord in x_plus_y:
+            old_coord = [coord[0], coord[1]]
+            if old_coord not in new_x_plus_y:
+                new_x_plus_y.append(old_coord)
             else:
-                y = y_coords.pop(0)-y_seq[0]
+                for y_offset in y_seq:
+                    plotted = False
+                    for x_offset in x_seq:
+                        new_coord = [coord[0] + x_offset, coord[1] - y_offset]
+                        if new_coord not in new_x_plus_y:
+                            new_x_plus_y.append(new_coord)
+                            plotted = True
+                            break
+                    if plotted is True:
+                        break
+
+        all_x = []
+        all_y = []
+        for x, _ in new_x_plus_y:
+            all_x.append(x - 135)
+        for _, y in new_x_plus_y:
+            all_y.append(y - 15)
+
+        for number, i, name, risk, x, y in zip(
+                numbers, amount_of_observations, observation_names,
+                risk_rating, all_x, all_y):
 
             # Actual plotting of observations
             if risk == 'H':
@@ -276,22 +291,37 @@ def recommendations(args):
     if x_coords and y_coords:
 
         # Build list of sequential x and y offsets
-        x_seq = list(reversed(range(25, 140, 25)))
-        y_seq = list(range(20, 80, 25))
+        x_seq = list(range(0, 120, 25))
+        y_seq = list(range(0, 80, 25))
 
-        full_row = 0
-        for number, i, name in zip(
-                numbers, amount_of_observations, observation_names):
-            full_row += 1
-            x_seq.append(x_seq[0])
-            y_seq.append(y_seq[0])
-            x = x_coords.pop(0)-x_seq.pop(0)
-
-            # Modulo 5 to jump to new row if current row is full
-            if full_row % 5 == 0:
-                y = y_coords.pop(0)-y_seq.pop(0)
+        x_plus_y = list(zip(x_coords, y_coords))
+        new_x_plus_y = []
+        for coord in x_plus_y:
+            old_coord = [coord[0], coord[1]]
+            if old_coord not in new_x_plus_y:
+                new_x_plus_y.append(old_coord)
             else:
-                y = y_coords.pop(0)-y_seq[0]
+                for y_offset in y_seq:
+                    plotted = False
+                    for x_offset in x_seq:
+                        new_coord = [coord[0] + x_offset, coord[1] - y_offset]
+                        if new_coord not in new_x_plus_y:
+                            new_x_plus_y.append(new_coord)
+                            plotted = True
+                            break
+                    if plotted is True:
+                        break
+
+        all_x = []
+        all_y = []
+        for x, _ in new_x_plus_y:
+            all_x.append(x - 125)
+        for _, y in new_x_plus_y:
+            all_y.append(y - 15)
+
+        for number, i, name, x, y in zip(
+                numbers, amount_of_observations, observation_names,
+                all_x, all_y):
 
             # Actual plotting of recommendations
             ax.scatter(

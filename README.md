@@ -71,4 +71,4 @@ To generate a recommendations plot: `$ rpg -iC example/input/recommendations.csv
 
 ## To do
 
-1. Figure out a better way to place markers on each grid section
+1. Figure out a way to optionally mark observations as "solved" by shading the marker
