@@ -16,6 +16,7 @@ risk_rating = []
 mylabels = []
 x_coords = []
 y_coords = []
+fixed = []
 amount_high = 0
 amount_medium = 0
 amount_low = 0
@@ -79,6 +80,7 @@ def load_risk_csv(args, amount_high, amount_medium, amount_low):
                 amount_low += 1
             x_coords.append(x)
             y_coords.append(y)
+            fixed.append(row[5])
 
     for row in enumerate(observation_names):
         amount_of_observations.append(row[0])
@@ -206,29 +208,71 @@ def grid(args):
         for _, y in new_x_plus_y:
             all_y.append(y - 15)
 
-        for number, i, name, risk, x, y in zip(
+        for number, i, name, risk, x, y, obs_fixed in zip(
                 numbers, amount_of_observations, observation_names,
-                risk_rating, all_x, all_y):
+                risk_rating, all_x, all_y, fixed):
 
             # Actual plotting of observations
             if risk == 'H':
-                ax.scatter(
-                    x, y, marker='o', c='#e20000', s=200, edgecolors='black')
-                ax.text(
-                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
-                    color='white', weight='bold')
+                if obs_fixed == '1':
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='white',
+                        weight='bold')
+                    ax.scatter(
+                        x, y, marker='o', c='#e20000', s=200,
+                        edgecolors='white', hatch='////')
+                    ax.scatter(
+                        x, y, marker='o', c='#ffffff00', s=200,
+                        edgecolors='black')
+                else:
+                    ax.scatter(
+                        x, y, marker='o', c='#e20000', s=200,
+                        edgecolors='black')
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='white',
+                        weight='bold')
             elif risk == 'M':
-                ax.scatter(
-                    x, y, marker='o', c='#fecb00', s=200, edgecolors='black')
-                ax.text(
-                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
-                    color='white', weight='bold')
+                if obs_fixed == '1':
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='white',
+                        weight='bold')
+                    ax.scatter(
+                        x, y, marker='o', c='#fecb00', s=200,
+                        edgecolors='white', hatch='////')
+                    ax.scatter(
+                        x, y, marker='o', c='#ffffff00', s=200,
+                        edgecolors='black')
+                else:
+                    ax.scatter(
+                        x, y, marker='o', c='#fecb00', s=200,
+                        edgecolors='black')
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='white',
+                        weight='bold')
             elif risk == 'L':
-                ax.scatter(
-                    x, y, marker='o', c='#ffff00', s=200, edgecolors='black')
-                ax.text(
-                    x+0, y-3, number, fontsize=7, horizontalalignment='center',
-                    color='black', weight='bold')
+                if obs_fixed == '1':
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='#00000080',
+                        weight='bold')
+                    ax.scatter(
+                        x, y, marker='o', c='#ffff80', s=200,
+                        edgecolors='#00000080', hatch='////')
+                    ax.scatter(
+                        x, y, marker='o', c='#ffffff00', s=200,
+                        edgecolors='black')
+                else:
+                    ax.scatter(
+                        x, y, marker='o', c='#ffff00', s=200,
+                        edgecolors='black')
+                    ax.text(
+                        x+0, y-3, number, fontsize=7,
+                        horizontalalignment='center', color='black',
+                        weight='bold')
 
     # Print legend
     if args.legend:

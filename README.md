@@ -32,9 +32,9 @@ repository: `python -m rpg.rpg --help`
 
 ```
 $ rpg -h
-usage: rpg.py [-h] [-g] [-d] [-r] -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
-              [--axis-labels AXIS_LABELS] [--axis-arrows AXIS_ARROWS]
-              [--legend LEGEND]
+usage: rpg [-h] (-g | -d | -r) -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
+           [--axis-labels AXIS_LABELS] [--axis-arrows AXIS_ARROWS]
+           [--legend LEGEND]
 
 Converting scanning reports to a tabular format
 
