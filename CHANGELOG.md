@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.8] - 2019-12-27
+
+### Added
+
+- None.
+
+### Changed
+
+- Fixed linter issues.
+
+### Removed
+
+- None.
+
+
 ## [0.0.7] - 2019-12-27
 
 ### Added
