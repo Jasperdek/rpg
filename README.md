@@ -2,8 +2,8 @@
 
 # Risk plot generator (rpg)
 
-This tool takes a CSV file with your observations and can output either a grid plot, or a donut ring.
-It also accepts a CSV with recommendations to output a recommendations grid.
+This tool takes a CSV or YAML file with your observations and can output either a grid plot, or a donut ring.
+It also accepts a CSV or YAML file with recommendations to output a recommendations grid.
 
 ## Rationale
 
