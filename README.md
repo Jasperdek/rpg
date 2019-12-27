@@ -32,43 +32,52 @@ repository: `python -m rpg.rpg --help`
 
 ```
 $ rpg -h
-usage: rpg [-h] (-g | -d | -r) -iC INPUT_CSV_FILE [-oP OUTPUT_PNG_FILE]
-           [--axis-labels AXIS_LABELS] [--axis-arrows AXIS_ARROWS]
-           [--legend LEGEND]
+usage: rpg [-h] (-iC INPUT_CSV_FILE | -iY INPUT_YAML_FILE) (-g | -d | -r)
+           [-oP OUTPUT_PNG_FILE] [--axis-labels AXIS_LABELS]
+           [--axis-arrows AXIS_ARROWS] [--legend LEGEND]
 
 Converting scanning reports to a tabular format
 
 optional arguments:
   -h, --help            show this help message and exit
+  -iC INPUT_CSV_FILE, --input-csv-file INPUT_CSV_FILE
+                        specify an input CSV file (e.g. observations.csv).
+  -iY INPUT_YAML_FILE, --input-yaml-file INPUT_YAML_FILE
+                        specify an input YAML file (e.g. observations.yml).
   -g, --grid            generate a risk grid plot.
   -d, --donut           generate a risk donut.
   -r, --recommendations
                         generate a risk recommendations plot.
-  -iC INPUT_CSV_FILE, --input-csv-file INPUT_CSV_FILE
-                        specify an input CSV file (e.g. data.csv).
   -oP OUTPUT_PNG_FILE, --output-png-file OUTPUT_PNG_FILE
                         specify an output PNG file (e.g. risk.png).
-  --axis-labels AXIS_LABELS
-                        specify to print the axis labels
-  --axis-arrows AXIS_ARROWS
-                        specify to print arrows along the axis
-  --legend LEGEND       specify to print the legend
+  --axis-labels         specify to print the axis labels
+  --axis-arrows         specify to print arrows along the axis
 ```
 
 ## Example
 
+A few examples
+
+### Risk grid plot
+
 To generate a risk grid plot: `$ rpg -iC example/input/observations.csv -oP example/output/grid.png -g`
+
+Or if you prefer YAML: `$ rpg -iY example/input/observations.yaml -oP example/output/grid.png -g`
 
 ![Grid](example/output/grid.png)
 
+### Risk donut
+
 To generate a risk donut: `$ rpg -iC example/input/observations.csv -oP example/output/donut.png -d`
+
+Or if you prefer YAML: `$ rpg -iY example/input/observations.yaml -oP example/output/donut.png -d`
 
 ![Donut](example/output/donut.png)
 
+### Risk recommendations
+
 To generate a recommendations plot: `$ rpg -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
 
+Or if you prefer YAML: `$ rpg -iY example/input/recommendations.yaml -oP example/output/recommendations.png -r`
+
 ![Recommendations](example/output/recommendations.png)
-
-## To do
-
-1. Figure out a way to optionally mark observations as "solved" by shading the marker

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rpg-0bs1d1an",
-    version="0.0.6",
+    version="0.0.7",
     author="Guido Kroon",
     author_email="gkroon@maelstrom.ninja",
     description="Risk plot generator",

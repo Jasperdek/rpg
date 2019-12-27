@@ -7,6 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 import pkg_resources
+import yaml
 # from pprint import pprint
 
 numbers = []
@@ -17,9 +18,6 @@ mylabels = []
 x_coords = []
 y_coords = []
 fixed = []
-amount_high = 0
-amount_medium = 0
-amount_low = 0
 
 
 def get_args():
@@ -29,29 +27,37 @@ def get_args():
         description='Converting scanning reports to a tabular format')
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument(
+        '-iC', '--input-csv-file',
+        help='specify an input CSV file (e.g. observations.csv).')
+    input_group.add_argument(
+        '-iY', '--input-yaml-file',
+        help='specify an input YAML file (e.g. observations.yml).')
+    render_group = parser.add_mutually_exclusive_group(required=True)
+    render_group.add_argument(
         '-g', '--grid', action='store_true', help='generate a risk grid plot.')
-    input_group.add_argument(
+    render_group.add_argument(
         '-d', '--donut', action='store_true', help='generate a risk donut.')
-    input_group.add_argument(
+    render_group.add_argument(
         '-r', '--recommendations', action='store_true',
         help='generate a risk recommendations plot.')
-    parser.add_argument(
-        '-iC', '--input-csv-file', required=True,
-        help='specify an input CSV file (e.g. data.csv).')
     parser.add_argument(
         '-oP', '--output-png-file',
         help='specify an output PNG file (e.g. risk.png).')
     parser.add_argument(
-        '--axis-labels', help='specify to print the axis labels')
+        '--axis-labels', action='store_true',
+        help='specify to print the axis labels')
     parser.add_argument(
-        '--axis-arrows', help='specify to print arrows along the axis')
-    parser.add_argument(
-        '--legend', help='specify to print the legend')
+        '--axis-arrows', action='store_true',
+        help='specify to print arrows along the axis')
     return parser.parse_args()
 
 
-def load_risk_csv(args, amount_high, amount_medium, amount_low):
+def load_risk_csv(args):
     """ Import CSV and translate Likelihood and Impact to numbers """
+
+    amount_high = 0
+    amount_medium = 0
+    amount_low = 0
 
     with open(args.input_csv_file, newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
@@ -85,6 +91,49 @@ def load_risk_csv(args, amount_high, amount_medium, amount_low):
     for row in enumerate(observation_names):
         amount_of_observations.append(row[0])
 
+    return amount_low, amount_medium, amount_high
+
+
+def load_risk_yaml(args):
+    """ Import YAML and translate Likelihood and Impact to numbers """
+
+    amount_high = 0
+    amount_medium = 0
+    amount_low = 0
+
+    with open(args.input_yaml_file, newline='') as yamlfile:
+        data = yaml.load(yamlfile, Loader=yaml.FullLoader)
+        for key, value in data.items():
+            numbers.append(key)
+            observation_names.append(value.get('name'))
+            risk_rating.append(value.get('risk'))
+            if value.get('likelihood') == "H":
+                x = 450
+            elif value.get('likelihood') == "M":
+                x = 300
+            elif value.get('likelihood') == "L":
+                x = 150
+            if value.get('impact') == "H":
+                y = 300
+            elif value.get('impact') == "M":
+                y = 200
+            elif value.get('impact') == "L":
+                y = 100
+            if value.get('risk') == "H":
+                amount_high += 1
+            elif value.get('risk') == "M":
+                amount_medium += 1
+            elif value.get('risk') == "L":
+                amount_low += 1
+            x_coords.append(x)
+            y_coords.append(y)
+            fixed.append(value.get('fixed'))
+
+    for row in enumerate(observation_names):
+        amount_of_observations.append(row[0])
+
+    return amount_low, amount_medium, amount_high
+
 
 def load_recommendations_csv(args):
     """ Import CSV and translate Likelihood and Impact to numbers """
@@ -114,7 +163,34 @@ def load_recommendations_csv(args):
         amount_of_observations.append(row[0])
 
 
-def donut(args):
+def load_recommendations_yaml(args):
+    """ Import YAML and translate Likelihood and Impact to numbers """
+
+    with open(args.input_yaml_file, newline='') as yamlfile:
+        data = yaml.load(yamlfile, Loader=yaml.FullLoader)
+        for key, value in data.items():
+            numbers.append(key)
+            observation_names.append(value.get('name'))
+            if value.get('complexity') == "H":
+                x = 450
+            elif value.get('complexity') == "M":
+                x = 300
+            elif value.get('complexity') == "L":
+                x = 150
+            if value.get('risk_mitigation') == "H":
+                y = 300
+            elif value.get('risk_mitigation') == "M":
+                y = 200
+            elif value.get('risk_mitigation') == "L":
+                y = 100
+            x_coords.append(x)
+            y_coords.append(y)
+
+    for row in enumerate(observation_names):
+        amount_of_observations.append(row[0])
+
+
+def donut(args, amount_low, amount_medium, amount_high):
     """ Ring functions """
 
     fig, ax = plt.subplots(subplot_kw=dict(aspect="equal"))
@@ -148,10 +224,6 @@ def donut(args):
         0.5, 0.45, exposure_level, transform=ax.transAxes, fontsize=24,
         horizontalalignment='center', verticalalignment='center',
         weight='bold')
-
-    # Print legend
-    if args.legend:
-        ax.legend(labels, loc="center left", bbox_to_anchor=(1, 0.5), ncol=1)
 
     # Output
     if not args.output_png_file:
@@ -274,14 +346,6 @@ def grid(args):
                         horizontalalignment='center', color='black',
                         weight='bold')
 
-    # Print legend
-    if args.legend:
-        for item in zip(numbers, observation_names):
-            mylabels.append(' '.join(item))
-        ax.legend(
-            observation_names, labels=mylabels, loc="upper left", ncol=1,
-            bbox_to_anchor=(1, 1.02))
-
     # Hide axis numbers
     ax.set_yticklabels([])
     ax.set_xticklabels([])
@@ -374,14 +438,6 @@ def recommendations(args):
                 x+0, y-3, number, fontsize=6, horizontalalignment='center',
                 color='white', weight='bold')
 
-    # Print legend
-    if args.legend:
-        for item in zip(numbers, observation_names):
-            mylabels.append(' '.join(item))
-        ax.legend(
-            observation_names, labels=mylabels, loc="upper left", ncol=1,
-            bbox_to_anchor=(1, 1.02))
-
     # Hide axis numbers
     ax.set_yticklabels([])
     ax.set_xticklabels([])
@@ -422,12 +478,19 @@ def main():
     args = get_args()
 
     if args.donut or args.grid:
-        load_risk_csv(args, amount_high, amount_medium, amount_low)
+        if args.input_csv_file:
+            amount_high, amount_medium, amount_low = load_risk_csv(args)
+        elif args.input_yaml_file:
+            amount_low, amount_medium, amount_high = load_risk_yaml(args)
+        print(amount_high)
     elif args.recommendations:
-        load_recommendations_csv(args)
+        if args.input_csv_file:
+            load_recommendations_csv(args)
+        elif args.input_yaml_file:
+            load_recommendations_yaml(args)
 
     if args.donut:
-        donut(args)
+        donut(args, amount_low, amount_medium, amount_high)
     if args.grid:
         grid(args)
     if args.recommendations:
