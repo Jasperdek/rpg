@@ -199,7 +199,6 @@ def donut(args, amount_low, amount_medium, amount_high):
     size = 0.25
 
     data = amount_high, amount_medium, amount_low
-    labels = ["High", "Medium", "Low"]
     colors = ["red", "orange", "yellow"]
 
     # Plot wedges
