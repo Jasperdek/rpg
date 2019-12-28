@@ -22,13 +22,17 @@ Using Pip:
 
 `pip install --user rpg-0bs1d1an`
 
+Using setup.py:
+
+`python setup.py install`
+
 ## Usage
 
 You can use sr2t in two ways:
 
 * When installed as package, call the installed script: `rpg --help`.
-* When Git cloned, call the script directly from the root of the Git
-repository: `python -m rpg.rpg --help`
+* When Git cloned, call the package directly from the root of the Git
+repository: `python -m rpg --help`
 
 ```
 $ rpg -h

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.9] - 2019-12-28
+
+### Added
+
+- None.
+
+### Changed
+
+- Restructured package a bit. When not installed as a package, rpg can be run with 'python -m rpg' (as opposed to 'python -m rpg.rpg').
+
+### Removed
+
+- None.
+
 ## [0.0.8] - 2019-12-27
 
 ### Added
@@ -15,7 +29,6 @@ All notable changes to this project will be documented in this file.
 ### Removed
 
 - None.
-
 
 ## [0.0.7] - 2019-12-27
 
