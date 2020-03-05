@@ -5,8 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rpg-0bs1d1an",
-    version="0.0.9",
+    version="0.0.10",
     author="Guido Kroon (@0bs1d1an)",
+    author_email="gkroon@maelstrom.ninja",
     description="Risk plot generator",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,7 +26,6 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        'argparse',
         'matplotlib',
     ],
     package_data={

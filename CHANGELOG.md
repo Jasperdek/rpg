@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.10] - 2020--3-05
+
+### Added.
+
+- None.
+
+### Changed
+
+- None.
+
+### Removed
+
+- Removed argparse as a separate dependency.
+
 ## [0.0.9] - 2019-12-28
 
 ### Added
