@@ -287,7 +287,7 @@ def grid(args):
             if risk == 'H':
                 if obs_fixed == '1':
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
+                        x+0, y-3, number, fontsize=5.5,
                         horizontalalignment='center', color='white',
                         weight='bold')
                     ax.scatter(
@@ -301,14 +301,14 @@ def grid(args):
                         x, y, marker='o', c='#e20000', s=200,
                         edgecolors='black')
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
+                        x+0, y-3, number, fontsize=5.5,
                         horizontalalignment='center', color='white',
                         weight='bold')
             elif risk == 'M':
                 if obs_fixed == '1':
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
-                        horizontalalignment='center', color='white',
+                        x+0, y-3, number, fontsize=5.5,
+                        horizontalalignment='center', color='black',
                         weight='bold')
                     ax.scatter(
                         x, y, marker='o', c='#fecb00', s=200,
@@ -321,13 +321,13 @@ def grid(args):
                         x, y, marker='o', c='#fecb00', s=200,
                         edgecolors='black')
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
-                        horizontalalignment='center', color='white',
+                        x+0, y-3, number, fontsize=5.5,
+                        horizontalalignment='center', color='black',
                         weight='bold')
             elif risk == 'L':
                 if obs_fixed == '1':
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
+                        x+0, y-3, number, fontsize=5.5,
                         horizontalalignment='center', color='#00000080',
                         weight='bold')
                     ax.scatter(
@@ -341,7 +341,7 @@ def grid(args):
                         x, y, marker='o', c='#ffff00', s=200,
                         edgecolors='black')
                     ax.text(
-                        x+0, y-3, number, fontsize=7,
+                        x+0, y-3, number, fontsize=5.5,
                         horizontalalignment='center', color='black',
                         weight='bold')
 
@@ -434,7 +434,7 @@ def recommendations(args):
             ax.scatter(
                 x, y, marker='o', c='#4f81bd', s=250, edgecolors='black')
             ax.text(
-                x+0, y-3, number, fontsize=6, horizontalalignment='center',
+                x+0, y-3, number, fontsize=5, horizontalalignment='center',
                 color='white', weight='bold')
 
     # Hide axis numbers
