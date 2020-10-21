@@ -5,10 +5,10 @@
 This tool takes a CSV or YAML file with your observations and can output either a grid plot, or a donut ring.
 It also accepts a CSV or YAML file with recommendations to output a recommendations grid.
 
-## Rationale
-
-I was fed-up with having to manually create these graphs for a client and I wanted to make my life easier.
-And since I want to increase my Python skills some more, this would be a fun little project to catch two birds with one stone.
+## Credits
+This project was originally created by Guido Kroon, see https://gitlab.com/0bs1d1an/rpg. As he put it:
+>I was fed-up with having to manually create these graphs for a client and I wanted to make my life easier.
+>And since I want to increase my Python skills some more, this would be a fun little project to catch two birds with one stone.
 
 ## Dependencies
 
