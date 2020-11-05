@@ -16,26 +16,13 @@ This project was originally created by Guido Kroon, see https://gitlab.com/0bs1d
 2. matplotlib (dev-python/matplotlib);
 3. python (dev-lang/python).
 
-## Install
-
-Using Pip:
-
-`pip install --user rpg-0bs1d1an`
-
-Using setup.py:
-
-`python setup.py install`
-
 ## Usage
 
-You can use sr2t in two ways:
-
-* When installed as package, call the installed script: `rpg --help`.
-* When Git cloned, call the package directly from the root of the Git
-repository: `python -m rpg --help`
+* Call the package directly from the root of the Git
+repository: `python3 -m rpg --help`
 
 ```
-$ rpg -h
+$ python3 -m rpg -h
 usage: rpg [-h] (-iC INPUT_CSV_FILE | -iY INPUT_YAML_FILE) (-g | -d | -r)
            [-oP OUTPUT_PNG_FILE] [--axis-labels AXIS_LABELS]
            [--axis-arrows AXIS_ARROWS] [--legend LEGEND]
@@ -64,24 +51,24 @@ A few examples
 
 ### Risk grid plot
 
-To generate a risk grid plot: `$ rpg -iC example/input/observations.csv -oP example/output/grid.png -g`
+To generate a risk grid plot: `$ python3 -m rpg -iC example/input/observations.csv -oP example/output/grid.png -g`
 
-Or if you prefer YAML: `$ rpg -iY example/input/observations.yaml -oP example/output/grid.png -g`
+Or if you prefer YAML: `$ python3 -m rpg -iY example/input/observations.yaml -oP example/output/grid.png -g`
 
 ![Grid](example/output/grid.png)
 
 ### Risk donut
 
-To generate a risk donut: `$ rpg -iC example/input/observations.csv -oP example/output/donut.png -d`
+To generate a risk donut: `$ python3 -m rpg -iC example/input/observations.csv -oP example/output/donut.png -d`
 
-Or if you prefer YAML: `$ rpg -iY example/input/observations.yaml -oP example/output/donut.png -d`
+Or if you prefer YAML: `$ python3 -m rpg -iY example/input/observations.yaml -oP example/output/donut.png -d`
 
 ![Donut](example/output/donut.png)
 
 ### Risk recommendations
 
-To generate a recommendations plot: `$ rpg -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
+To generate a recommendations plot: `$ python3 -m rpg -iC example/input/recommendations.csv -oP example/output/recommendations.png -r`
 
-Or if you prefer YAML: `$ rpg -iY example/input/recommendations.yaml -oP example/output/recommendations.png -r`
+Or if you prefer YAML: `$ python3 -m rpg -iY example/input/recommendations.yaml -oP example/output/recommendations.png -r`
 
 ![Recommendations](example/output/recommendations.png)

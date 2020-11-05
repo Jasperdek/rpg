@@ -384,7 +384,7 @@ def recommendations(args):
 
     # Background
     recommendations_bg = pkg_resources.resource_stream(
-        __name__, 'data/recommendations-bg.png')
+        __name__, 'data/recommendations-bg-2020.png')
     img = plt.imread(recommendations_bg)
 
     # Axis spacing values
